@@ -6,7 +6,7 @@ Console logging utilities with coloured output, warning control, and tqdm suppor
 import os
 import traceback
 from tqdm import tqdm
-from pylogs import color
+import color
 from datetime import datetime
 from typing import Callable
 
