@@ -3,7 +3,7 @@ Console logging utilities with coloured output, warning control, and tqdm suppor
 
 @source: https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py
 """
-import os
+import os, sys
 import traceback
 from tqdm import tqdm
 import color
@@ -49,7 +49,7 @@ def _write(message: str, style_func: Callable | None = None):
     if style_func:
         message = style_func(message)
     if tqdm._instances:
-        tqdm.write(message)
+        tqdm.write(message, file=sys.stdout)
     else:
         print(message)
 
@@ -76,7 +76,7 @@ def write(message: str, style_func: Callable | None = None):
     output = style_func(message) if style_func else message
 
     if tqdm._instances:
-        tqdm.write(f"{output}")
+        tqdm.write(f"{output}", file=sys.stdout)
     else:
         print(f"{output}")
 
