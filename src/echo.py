@@ -15,6 +15,7 @@ from typing import Callable
 _ignore_warnings = False # True=Ignore warnings
 _warnings_level = 3 # 0=All, 1=Error, 2=Warnings, 3=Deprecated
 _no_style = False
+_is_silent = False
 
 def set_ignore_warnings(warnings_level: int = 0, ignore: bool = True):
     """
@@ -38,6 +39,15 @@ def set_ignore_style(ignore: bool = True):
     global _no_style
     _no_style = ignore
 
+def set_silent_mode(silent: bool = True):
+    """
+    Enable or disable silent mode, which suppresses all output.
+
+    Args:
+        silent (bool): Whether to enable silent mode.
+    """
+    global _is_silent
+    _is_silent = silent
 
 
 ## METHODS
@@ -62,6 +72,8 @@ def _message(message: str, prefix: str, style_func, *, emit_warning: bool = Fals
         emit_warning (bool, optional): Whether to append stack info for warnings.
         warnings_level (int, optional): Warning level threshold for display.
     """
+    if _is_silent:
+        return
     if emit_warning:
         if _ignore_warnings and warnings_level > _warnings_level:
             return
@@ -78,6 +90,8 @@ def _message(message: str, prefix: str, style_func, *, emit_warning: bool = Fals
     _write(output)
 
 def _write(message: str, style_func: Callable | None = None):
+    if _is_silent:
+        return
     if style_func and not _no_style:
         message = style_func(message)
     if tqdm._instances:
@@ -93,6 +107,8 @@ def write(message: str, style_func: Callable | None = None):
         message (str): The message text to print.
         style_func (callable, optional): A colour/style function (e.g. color.info).
     """
+    if _is_silent:
+        return
     output = style_func(message) if style_func and not _no_style else message
 
     if tqdm._instances:
