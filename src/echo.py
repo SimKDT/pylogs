@@ -10,8 +10,37 @@ import color
 from datetime import datetime
 from typing import Callable
 
+## CONFIGS
+
 _ignore_warnings = False # True=Ignore warnings
 _warnings_level = 3 # 0=All, 1=Error, 2=Warnings, 3=Deprecated
+_no_style = False
+
+def set_ignore_warnings(warnings_level: int = 0, ignore: bool = True):
+    """
+    Enable or disable warning output filtering by level.
+
+    Args:
+        warnings_level (int): Minimum warning level to show.
+        ignore (bool): Whether to suppress warnings below the level.
+    """
+    global _ignore_warnings, _warnings_level
+    _ignore_warnings = ignore
+    _warnings_level = warnings_level
+
+def set_ignore_style(ignore: bool = True):
+    """
+    Enable or disable coloured output styling.
+
+    Args:
+        ignore (bool): Whether to suppress coloured output.
+    """
+    global _no_style
+    _no_style = ignore
+
+
+
+## METHODS
 
 def noise(*args):
     if tqdm._instances:
@@ -41,29 +70,20 @@ def _message(message: str, prefix: str, style_func, *, emit_warning: bool = Fals
     #     stack = traceback.extract_stack()
     #     write("".join(traceback.format_list(stack)), color.red)
 
-    output = f"{style_func(prefix)} {message}"
+    if _no_style:
+        output = f"{prefix} {message}"
+    else:
+        output = f"{style_func(prefix)} {message}"
 
     _write(output)
 
 def _write(message: str, style_func: Callable | None = None):
-    if style_func:
+    if style_func and not _no_style:
         message = style_func(message)
     if tqdm._instances:
         tqdm.write(message, file=sys.stdout)
     else:
         print(message)
-
-def ignore_warnings(warnings_level: int = 0, ignore: bool = True):
-    """
-    Enable or disable warning output filtering by level.
-
-    Args:
-        warnings_level (int): Minimum warning level to show.
-        ignore (bool): Whether to suppress warnings below the level.
-    """
-    global _ignore_warnings, _warnings_level
-    _ignore_warnings = ignore
-    _warnings_level = warnings_level
 
 def write(message: str, style_func: Callable | None = None):
     """
@@ -73,7 +93,7 @@ def write(message: str, style_func: Callable | None = None):
         message (str): The message text to print.
         style_func (callable, optional): A colour/style function (e.g. color.info).
     """
-    output = style_func(message) if style_func else message
+    output = style_func(message) if style_func and not _no_style else message
 
     if tqdm._instances:
         tqdm.write(f"{output}", file=sys.stdout)
