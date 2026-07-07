@@ -77,10 +77,8 @@ def _message(message: str, prefix: str, style_func, *, emit_warning: bool = Fals
     if emit_warning:
         if _ignore_warnings and warnings_level > _warnings_level:
             return
-    
-    # if emit_warning:
-    #     stack = traceback.extract_stack()
-    #     write("".join(traceback.format_list(stack)), color.red)
+        stack = traceback.extract_stack()
+        _write("".join(traceback.format_list(stack)), color.red)
 
     if _no_style:
         output = f"{prefix} {message}"
