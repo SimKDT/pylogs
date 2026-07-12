@@ -12,9 +12,6 @@ from typing import Callable
 import pylogs.color as color
 from pylogs.status import _ignore_warnings, _warnings_level, _no_style, _is_silent
 
-# deprecration
-from pylogs.status import set_ignore_warnings, set_ignore_style, set_silent_mode
-
 ## METHODS
 
 def noise(*args):
