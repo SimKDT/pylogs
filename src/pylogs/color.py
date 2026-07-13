@@ -108,6 +108,11 @@ def blue(text: str) -> str:
 
 
 
+def path(text: str) -> str:
+    return yellow(text)
+
+
+
 if __name__ == "__main__":
     print(error("This is an error message."))
     print(warning("This is a warning message."))

@@ -149,7 +149,7 @@ def notice(message, color=color.cyan):
     """
     write(message, color)
 
-def path(message, color=color.yellow):
+def path(message, color=color.path):
     """
     Print a notice message in cyan.
 
