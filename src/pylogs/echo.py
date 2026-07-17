@@ -100,7 +100,7 @@ def warning(message: str, _prefix="Warning", emit_warning=True, warning_level=2)
     """
     _message(message, f"[{_prefix}]", color.warning, emit_warning=emit_warning, warnings_level=warning_level)
 
-def error(message: str, _prefix="Error", emit_warning=True, warnings_level=1, message_style = color.error):
+def error(message: str, _prefix="Error", emit_warning=True, warnings_level=1, message_style = color.red):
     """
     Print an error message in red with error context.
 
