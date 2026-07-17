@@ -15,7 +15,7 @@ from pylogs.status import _ignore_warnings, _warnings_level, _no_style, _is_sile
 ## METHODS
 
 def noise(*args):
-    if tqdm._instances:
+    if tqdm._instances: # type: ignore
         tqdm.write(" ".join(map(str, args)))
     else:
         print(*args)
@@ -23,7 +23,12 @@ def noise(*args):
 def _get_time():
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-def _message(message: str, prefix: str, style_func, *, emit_warning: bool = False, warnings_level: int = 3):
+def _message(message: str, 
+             prefix: str, 
+             style_func, *, 
+             emit_warning: bool = False, 
+             warnings_level: int = 3, 
+             message_style: Callable | None = None):
     """
     Print a coloured message with optional warning metadata.
 
@@ -33,6 +38,7 @@ def _message(message: str, prefix: str, style_func, *, emit_warning: bool = Fals
         style_func (callable): A function that applies styling (e.g., color.info).
         emit_warning (bool, optional): Whether to append stack info for warnings.
         warnings_level (int, optional): Warning level threshold for display.
+        message_style (callable, optional): A function that applies styling to the message text.
     """
     if _is_silent:
         return
@@ -45,7 +51,7 @@ def _message(message: str, prefix: str, style_func, *, emit_warning: bool = Fals
     if _no_style:
         output = f"{prefix} {message}"
     else:
-        output = f"{style_func(prefix)} {message}"
+        output = f"{style_func(prefix)} {message_style(message) if message_style else message}"
 
     _write(output)
 
@@ -54,7 +60,7 @@ def _write(message: str, style_func: Callable | None = None):
         return
     if style_func and not _no_style:
         message = style_func(message)
-    if tqdm._instances:
+    if tqdm._instances: # type: ignore
         tqdm.write(message, file=sys.stdout)
     else:
         print(message)
@@ -71,7 +77,7 @@ def write(message: str, style_func: Callable | None = None):
         return
     output = style_func(message) if style_func and not _no_style else message
 
-    if tqdm._instances:
+    if tqdm._instances: # type: ignore
         tqdm.write(f"{output}", file=sys.stdout)
     else:
         print(f"{output}")
@@ -94,14 +100,14 @@ def warning(message: str, _prefix="Warning", emit_warning=True, warning_level=2)
     """
     _message(message, f"[{_prefix}]", color.warning, emit_warning=emit_warning, warnings_level=warning_level)
 
-def error(message: str, _prefix="Error", emit_warning=True, warnings_level=1):
+def error(message: str, _prefix="Error", emit_warning=True, warnings_level=1, message_style = color.error):
     """
     Print an error message in red with error context.
 
     Args:
         message (str): The error text to display.
     """
-    _message(message, f"[{_prefix}]", color.error, emit_warning=emit_warning, warnings_level=warnings_level)
+    _message(message, f"[{_prefix}]", color.error, emit_warning=emit_warning, warnings_level=warnings_level, message_style=message_style)
 
 def success(message: str):
     """
