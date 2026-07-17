@@ -5,6 +5,7 @@ Includes basic styles, colours, and helper functions like `error()`, `warning()`
 
 @source: https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/color.py
 """
+from typing import Any
 
 from pylogs.status import _no_style
 
@@ -61,54 +62,55 @@ BG_BRIGHT_WHITE   = "\033[107m"
 
 ## ------------------- Style Helpers ------------------- ##
 
-def style(text: str, *styles: str) -> str:
+def style(text: Any, *styles: str) -> str:
     """Apply one or more styles to a string."""
+    text = str(text) # ensure handling as string
     if _no_style:
         return text
     return f"{''.join(styles)}{text}{RESET}"
 
 ## ------------------- Preset Styles ------------------- ##
 
-def error(text: str) -> str:
+def error(text: Any) -> str:
     return style(text, BG_RED, BOLD)
 
-def warning(text: str) -> str:
+def warning(text: Any) -> str:
     return style(text, BG_YELLOW, BOLD)
 
-def success(text: str) -> str:
+def success(text: Any) -> str:
     return style(text, BG_GREEN, BOLD)
 
-def info(text: str) -> str:
+def info(text: Any) -> str:
     return style(text, BG_CYAN, BOLD)
 
-def dimmed(text: str) -> str:
+def dimmed(text: Any) -> str:
     return style(text, DIM)
 
-def debug(text: str) -> str:
+def debug(text: Any) -> str:
     return style(text, BG_BRIGHT_MAGENTA, BOLD)
 
-def red(text: str) -> str:
+def red(text: Any) -> str:
     return style(text, RED)
 
-def green(text: str) -> str:
+def green(text: Any) -> str:
     return style(text, GREEN)
 
-def cyan(text: str) -> str:
+def cyan(text: Any) -> str:
     return style(text, CYAN)
 
-def magenta(text: str) -> str:
+def magenta(text: Any) -> str:
     return style(text, MAGENTA)
 
-def yellow(text: str) -> str:
+def yellow(text: Any) -> str:
     return style(text, YELLOW)
 
-def blue(text: str) -> str:
+def blue(text: Any) -> str:
     return style(text, RED, BLUE)
 
 
 
 
-def path(text: str) -> str:
+def path(text: Any) -> str:
     return yellow(text)
 
 
