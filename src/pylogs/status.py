@@ -1,11 +1,13 @@
 """Handles the configuration settings for the logging system, including warning levels, output styling, and silent mode."""
 
+from pylogs import utils
+
 
 ## CONFIGS
 
 _ignore_warnings = False # True=Ignore warnings
 _warnings_level = 3 # 0=All, 1=Error, 2=Warnings, 3=Deprecated
-_no_style = False
+_no_style = utils.is_nohup() # True=No color output
 _is_silent = False
 
 def set_ignore_warnings(warnings_level: int = 0, ignore: bool = True):
