@@ -5,9 +5,10 @@ from pylogs import utils
 
 ## CONFIGS
 
+IS_NOHUP = utils.is_nohup()
 _ignore_warnings = False # True=Ignore warnings
 _warnings_level = 3 # 0=All, 1=Error, 2=Warnings, 3=Deprecated
-_no_style = utils.is_nohup() # True=No color output
+_no_style = IS_NOHUP # True=No color output
 _is_silent = False
 
 def set_ignore_warnings(warnings_level: int = 0, ignore: bool = True):
