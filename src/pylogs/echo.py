@@ -17,7 +17,7 @@ from pylogs.status import _ignore_warnings, _warnings_level, _no_style, _is_sile
 
 def noise(*args):
     if tqdm._instances: # type: ignore
-        tqdm.write(" ".join(map(str, args)))
+        tqdm.write(" ".join(map(str, args)), file=sys.stdout)
     else:
         print(*args)
 
@@ -62,10 +62,7 @@ def _write(message: Any, style_func: Callable | None = None):
     message = str(message)
     if style_func and not _no_style:
         message = style_func(message)
-    if tqdm._instances: # type: ignore
-        tqdm.write(message, file=sys.stdout)
-    else:
-        print(message)
+    noise(message)
 
 def write(*args, **kargs):
     warn("The 'write' function is deprecated. Use '_write' instead.", DeprecationWarning, stacklevel=2)
@@ -164,4 +161,4 @@ if __name__ == "__main__":
     notice("This is a notice message.")
     path("This is a path message.")
 
-    write("This is a write message.")
+    # write("This is a write message.")
