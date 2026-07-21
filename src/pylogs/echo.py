@@ -7,7 +7,8 @@ import os, sys
 import traceback
 from tqdm import tqdm
 from datetime import datetime
-from typing import Callable
+from typing import Callable, Any
+from warnings import warn
 
 import pylogs.color as color
 from pylogs.status import _ignore_warnings, _warnings_level, _no_style, _is_silent
@@ -55,9 +56,10 @@ def _message(message: str,
 
     _write(output)
 
-def _write(message: str, style_func: Callable | None = None):
+def _write(message: Any, style_func: Callable | None = None):
     if _is_silent:
         return
+    message = str(message)
     if style_func and not _no_style:
         message = style_func(message)
     if tqdm._instances: # type: ignore
@@ -65,65 +67,52 @@ def _write(message: str, style_func: Callable | None = None):
     else:
         print(message)
 
-def write(message: str, style_func: Callable | None = None):
-    """
-    Print a standard message safely, supporting tqdm progress bars.
+def write(*args, **kargs):
+    warn("The 'write' function is deprecated. Use '_write' instead.", DeprecationWarning, stacklevel=2)
+    _write(*args, **kargs)
 
-    Args:
-        message (str): The message text to print.
-        style_func (callable, optional): A colour/style function (e.g. color.info).
-    """
-    if _is_silent:
-        return
-    output = style_func(message) if style_func and not _no_style else message
-
-    if tqdm._instances: # type: ignore
-        tqdm.write(f"{output}", file=sys.stdout)
-    else:
-        print(f"{output}")
-
-def info(message: str, _prefix="Info"):
+def info(message: Any, _prefix="Info"):
     """
     Print an informational message in cyan.
 
     Args:
-        message (str): The message text to display.
+        message (Any): The message text to display.
     """
     _message(message, f"[{_prefix}]", color.info)
 
-def warning(message: str, _prefix="Warning", emit_warning=True, warning_level=2):
+def warning(message: Any, _prefix="Warning", emit_warning=True, warning_level=2):
     """
     Print a warning message in yellow with warning context.
 
     Args:
-        message (str): The warning text to display.
+        message (Any): The warning text to display.
     """
     _message(message, f"[{_prefix}]", color.warning, emit_warning=emit_warning, warnings_level=warning_level)
 
-def error(message: str, _prefix="Error", emit_warning=True, warnings_level=1, message_style = color.red):
+def error(message: Any, _prefix="Error", emit_warning=True, warnings_level=1, message_style = color.red):
     """
     Print an error message in red with error context.
 
     Args:
-        message (str): The error text to display.
+        message (Any): The error text to display.
     """
     _message(message, f"[{_prefix}]", color.error, emit_warning=emit_warning, warnings_level=warnings_level, message_style=message_style)
 
-def success(message: str):
+def success(message: Any):
     """
     Print a success message in green.
 
     Args:
-        message (str): The success message to display.
+        message (Any): The success message to display.
     """
     _message(message, "[Success]", color.success)
 
-# def debug(message: str):
+# def debug(message: Any):
 #     """
 #     Print a debug message in magenta if debug mode is enabled.
 
 #     Args:
-#         message (str): The debug text to display.
+#         message (Any): The debug text to display.
 #     """
 #     from scripts.core import config_manager as config
 #     debug_mode = config.get_debug_mode()
@@ -131,19 +120,19 @@ def success(message: str):
 #     if debug_mode:
 #         _message(message, "[Debug]", color.debug)
 
-def deprecated(message: str):
+def deprecated(message: Any):
     """
     Print a deprecation warning in magenta with warning context.
 
     Args:
-        message (str): The deprecation message to display.
+        message (Any): The deprecation message to display.
     """
     _message(message, "[Deprecated]", color.debug, emit_warning=True, warnings_level=3)
 
-def cyan(message, color=color.cyan):
+def cyan(message: Any, color=color.cyan):
     _write(message, color)
 
-def time(message, color=color.debug):
+def time(message: Any, color=color.debug):
     _message(message, f"[{_get_time()}]", color)
 
 def notice(message, color=color.cyan):
@@ -151,18 +140,18 @@ def notice(message, color=color.cyan):
     Print a notice message in cyan.
 
     Args:
-        message (str): The notice message to display.
+        message (Any): The notice message to display.
     """
-    write(message, color)
+    _write(message, color)
 
 def path(message, color=color.path):
     """
     Print a notice message in cyan.
 
     Args:
-        message (str): The notice message to display.
+        message (Any): The notice message to display.
     """
-    write(message, color)
+    _write(message, color)
 
 
 
@@ -174,3 +163,5 @@ if __name__ == "__main__":
     deprecated("This is a deprecated message.")
     notice("This is a notice message.")
     path("This is a path message.")
+
+    write("This is a write message.")
