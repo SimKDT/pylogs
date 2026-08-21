@@ -75,9 +75,9 @@ class Logger:
     """Current active instance of the logger in use."""
 
 
-    def __init__(self, out_dir: Path):
-        self.out_dir = out_dir
-        self.log_file = get_logs_file(out_dir)
+    def __init__(self, out_dir: Path | str):
+        self.out_dir = Path(out_dir)
+        self.log_file = get_logs_file(self.out_dir)
         self.original_stdout = sys.stdout
         set_logs(self.log_file)
         Logger.instance = self
