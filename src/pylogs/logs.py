@@ -1,5 +1,16 @@
-import sys, os
-import re
+"""
+Module for logging in a log file.
+
+Example usage:
+```python
+logger = Logger(out_dir=Path(".logs"))
+echo.info("This is an info message.")
+echo.warning("This is a warning message.")
+logger.close()
+```
+"""
+
+import sys
 from pathlib import Path
 from datetime import datetime
 
@@ -35,7 +46,7 @@ def get_logs_file(out_dir: Path) -> Path:
     Returns:
         Path: The path to the log file.
     """
-    log_filename = datetime.now().strftime("FSPIV_%Y-%m-%d_%H-%M-%S.logs")
+    log_filename = datetime.now().strftime("log_%Y-%m-%d_%H-%M-%S.logs")
     log = out_dir / log_filename
     return log
 
