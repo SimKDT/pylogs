@@ -11,3 +11,7 @@ authors = [
 dependencies = [
     "tqdm"
 ]
+
+[project.urls]
+Homepage = "https://github.com/SimKDT/pylogs"
+Issues = "https://github.com/SimKDT/pylogs/issues"
