@@ -1,9 +1,7 @@
 # pylogs
 
-![License](https://img.shields.io/github/license/SimKDT/pylogs?label=License)
-![Downloads](https://img.shields.io/github/downloads/SimKDT/pylogs/total?label=Downloads)
+[![License](https://img.shields.io/github/license/SimKDT/pylogs?label=License)](LICENSE)
 ![Code Size](https://img.shields.io/github/languages/code-size/SimKDT/pylogs?label=Code%20Size)
-![PyPi Version](https://img.shields.io/pypi/v/pylogs)
 
 Python library of my own to provide console highlighting and logging features.
 
