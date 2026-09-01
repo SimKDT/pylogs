@@ -36,7 +36,7 @@ class Tee(object):
         for f in self.files:
             f.flush()
 
-def get_logs_file(out_dir: Path) -> Path:
+def get_logs_file(out_dir: Path | str) -> Path:
     """
     Retrieves the log file path based on the current timestamp and the specified output directory.
 
@@ -46,17 +46,18 @@ def get_logs_file(out_dir: Path) -> Path:
     Returns:
         Path: The path to the log file.
     """
-    log_filename = datetime.now().strftime("log_%Y-%m-%d_%H-%M-%S.logs")
-    log = out_dir / log_filename
+    log_filename = datetime.now().strftime("log_%Y-%m-%d_%H-%M-%S.log")
+    log = Path(out_dir) / log_filename
     return log
 
-def set_logs(log_file: Path):
+def set_logs(log_file: Path | str = get_logs_file(".logs")):
     """
     Sets up logging to a specified log file by redirecting stdout to both the console and the log file.
 
     Args:
         log_file (Path): The path to the log file.
     """
+    log_file = Path(log_file)
     log_file.parent.mkdir(parents=True, exist_ok=True)
     f = open(log_file, 'w')
     sys.stdout = Tee(sys.stdout, f)
@@ -75,7 +76,7 @@ class Logger:
     """Current active instance of the logger in use."""
 
 
-    def __init__(self, out_dir: Path | str):
+    def __init__(self, out_dir: Path | str = ".logs"):
         self.out_dir = Path(out_dir)
         self.log_file = get_logs_file(self.out_dir)
         self.original_stdout = sys.stdout

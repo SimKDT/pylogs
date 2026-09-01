@@ -33,6 +33,5 @@ pip install .
 ```
 </details>
 
-
 ## License
 See [LICENSE](LICENSE) for more information.
